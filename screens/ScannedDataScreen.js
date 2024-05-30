@@ -1,12 +1,52 @@
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
+import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  DataTable,
+  IconButton,
+  MD3Colors,
+  PaperProvider,
+  Text,
+} from "react-native-paper";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import QuantityManage from "../components/QuantityManage";
+import GstManage from "../components/GstManage";
+
+const headers = [
+  { key: "name", label: "Name", width: 130 },
+  { key: "quantity", label: "Quantity", width: 80 },
+  { key: "price", label: "Price (₹)", width: 70 },
+  { key: "totalPrice", label: "Taxable Value (₹)", width: 125 },
+  { key: "cgst", label: "CGST (₹)", width: 95 },
+  { key: "sgst", label: "SGST (₹)", width: 95 },
+  { key: "total", label: "Total (₹)", width: 95 },
+  { key: "action", label: "Action", width: 50 },
+];
 
 const ScannedDataScreen = (props) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [visible, setVisible] = React.useState(false);
+  const [visibleGst, setVisibleGst] = useState(false)
+
+  const showDialog = (item) => {
+    setVisible(true);
+    setSelectedItem(item);
+  };
+
+  const hideDialog = () => {
+    setVisible(false);
+    setSelectedItem(null);
+  };
+  const showDialogGst = (item) => {
+    setVisibleGst(true);
+    setSelectedItem(item);
+  };
+
+  const hideDialogGst = () => {
+    setVisibleGst(false);
+    setSelectedItem(null);
+  };
 
   const openModal = (item) => {
     setSelectedItem(item);
@@ -25,75 +65,165 @@ const ScannedDataScreen = (props) => {
     closeModal();
   };
 
-  return (
-    <View style={styles.main}>
-      {props?.data1?.length > 0 ? (
-        <View style={styles.container}>
-          <View style={styles.row}>
-            <Text style={styles.cell1}>Name</Text>
-            <Text style={styles.cell2}>Price</Text>
-            <Text style={styles.cell3}>Quantity</Text>
-            <Text style={styles.cell4}>Total Price</Text>
-            <Text style={styles.cell5}>Action</Text>
-          </View>
-          {props?.data1?.map((v) => (
-            <View style={styles.row} key={v?.id}>
-              <Text style={styles.cell1}>{v?.name}</Text>
-              <Text style={styles.cell2}>{v?.price}₹</Text>
-              <Text style={styles.cell3}>
-                <View><FontAwesome6 name="minus" size={18} color="black" onPress={() => props.decreaseQty(v)}/></View>
-                <View><Text style={styles.qty}>{v?.quantity}</Text></View>
-                <View><FontAwesome6 name="add" size={18} color="black" onPress={() => props.increaseQty(v)}/></View>
-              </Text>
-              <Text style={styles.cell4}>{+v?.price * +v?.quantity}₹</Text>
-              <Text style={styles.cell5}>
-                {/* kj */}
-                <MaterialIcons
-                  style={styles.delete}
-                  name="delete-forever"
-                  size={24}
-                  color="red"
-                  onPress={() => openModal(v)}
-                />
-              </Text>
-            </View>
-          ))}
+  const handleChangeQty = (item) => {
+    console.log(item);
+    let data = [...props?.data1];
+    let newData = data?.map((v) =>
+      v?.id == item?.id
+        ? {
+            ...v,
+            quantity: item?.quantity,
+          }
+        : v
+    );
+    console.log("newData", newData);
+    props.setData(newData);
+    hideDialog();
+  };
+  const handleChangeGst = (item) => {
+    console.log(item);
+    let data = [...props?.data1];
+    let newData = data?.map((v) =>
+      v?.id == item?.id
+        ? {
+            ...v,
+            gst: item?.quantity,
+          }
+        : v
+    );
+    console.log("newData", newData);
+    props.setData(newData);
+    hideDialogGst();
+  };
 
-          <View style={styles.row}>
-            <Text style={styles.cell1}></Text>
-            <Text style={styles.cell2}></Text>
-            <Text style={styles.cell3}></Text>
-            <Text style={styles.cell4}>
-              {props?.data1?.reduce((total, item) => {
-                return total + item.price * item.quantity;
-              }, 0)}
-              ₹
-            </Text>
-            <Text style={styles.cell5}></Text>
+  return (
+    <PaperProvider>
+      <View style={styles.main}>
+        {props?.data1?.length > 0 ? (
+          <View style={styles.container}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <DataTable>
+                <DataTable.Header>
+                  {headers.map((header, index) => (
+                    <DataTable.Title
+                      key={index}
+                      style={{
+                        width: header.width,
+                        justifyContent: index == 0 ? "start" : "center",
+                      }}
+                    >
+                      <Text style={styles.headerText}>{header.label}</Text>
+                    </DataTable.Title>
+                  ))}
+                </DataTable.Header>
+                {props?.data1?.map((item) => (
+                  <DataTable.Row key={item.id}>
+                    <DataTable.Cell
+                      style={[{ width: headers[0].width }]}
+                      contentStyle={styles.cellContent}
+                    >
+                      {item.name}
+                    </DataTable.Cell>
+                    <DataTable.Cell
+                      style={[styles.cell, { width: headers[1].width }]}
+                      contentStyle={styles.cellContent}
+                      onPress={() => showDialog(item)}
+                    >
+                      {item.quantity}
+                    </DataTable.Cell>
+                    <DataTable.Cell
+                      style={[styles.cell, { width: headers[2].width }]}
+                      contentStyle={styles.cellContent}
+                    >
+                      {item.price}
+                    </DataTable.Cell>
+                    <DataTable.Cell
+                      style={[styles.cell, { width: headers[3].width }]}
+                      contentStyle={styles.cellContent}
+                    >
+                      {+item?.price * +item?.quantity}
+                    </DataTable.Cell>
+                    <DataTable.Cell
+                      style={[styles.cell, { width: headers[4].width }]}
+                      contentStyle={styles.cellContent}
+                      onPress={() => showDialogGst(item)}
+                    >
+                      {item?.gst} {"(0 %)"}
+                    </DataTable.Cell>
+                    <DataTable.Cell
+                      style={[styles.cell, { width: headers[5].width }]}
+                      contentStyle={styles.cellContent}
+                      onPress={() => showDialogGst(item)}
+                    >
+                      {item?.gst} {"(0 %)"}
+                    </DataTable.Cell>
+                    <DataTable.Cell
+                      style={[styles.cell, { width: headers[6].width }]}
+                      contentStyle={styles.cellContent}
+                    >
+                      10000
+                    </DataTable.Cell>
+                 
+                    
+                    <DataTable.Cell
+                      style={[styles.cell, { width: headers[7].width }]}
+                      contentStyle={styles.cellContent}
+                    >
+                      <IconButton
+                        icon="delete"
+                        iconColor={MD3Colors.error50}
+                        size={24}
+                        onPress={() => openModal(item)}
+                      />
+                    </DataTable.Cell>
+                  </DataTable.Row>
+                ))}
+                <DataTable.Row >
+                <DataTable.Cell
+                  style={[{ width: 95 }]}
+                  contentStyle={styles.cellContent}
+                >
+                  500₹
+                </DataTable.Cell>
+                </DataTable.Row>
+              </DataTable>
+            </ScrollView>
           </View>
+        ) : (
+          <View style={styles.noData}>
+            <Text style={styles.noDataText}>No Data Found!</Text>
+          </View>
+        )}
+        <View style={styles.btns}>
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => props.setScanned(false)}
+          >
+            <Text style={styles.save}>Scan Again</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btn}>
+            <Text style={styles.save}>Save</Text>
+          </TouchableOpacity>
         </View>
-      ) : (
-        <View style={styles?.noData}>
-          <Text style={styles?.noDataText}>No Data Found!</Text>
-        </View>
-      )}
-      <View style={styles.btns}>
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() => props.setScanned(false)}
-        >
-          <Text style={styles.save}>Scan Again</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.btn}>
-          <Text style={styles.save}>Save</Text>
-        </TouchableOpacity>
+        <DeleteConfirmationModal
+          isVisible={isModalVisible}
+          onConfirm={handleDelete}
+          onCancel={closeModal}
+        />
+        <QuantityManage
+          hideDialog={hideDialog}
+          visible={visible}
+          selectedItem={selectedItem}
+          handleChangeQty={handleChangeQty}
+        />
+        <GstManage 
+        hideDialog={hideDialogGst}
+        visible={visibleGst}
+        selectedItem={selectedItem}
+        handleChangeGst={handleChangeGst}
+        />
       </View>
-      <DeleteConfirmationModal
-        isVisible={isModalVisible}
-        onConfirm={handleDelete}
-        onCancel={closeModal}
-      />
-    </View>
+    </PaperProvider>
   );
 };
 
@@ -102,69 +232,24 @@ export default ScannedDataScreen;
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    // height : "100%",
     justifyContent: "space-between",
+    backgroundColor: "#fff",
   },
   container: {
-    borderWidth: 1,
-    //   flex : 1,
-    borderColor: "#000",
-    borderRadius: 5,
-    overflow: "hidden",
+    flex: 1,
   },
-  row: {
-    flexDirection: "row",
-    //   justifyContent: 'space-between',
-    padding: 10,
-    borderBottomWidth: 1,
-
-    borderBottomColor: "#000",
+  headerText: {
+    fontWeight: "bold",
+    textAlign: "left",
+    fontSize: 15,
   },
   cell: {
-    flex: 1,
-    textAlign: "start",
-    width: "20%",
-  },
-  cell1: {
-    //   flex: 1,
-    textAlign: "start",
-    width: "30%",
-  },
-  cell2: {
-    //   flex: 1,
-    textAlign: "center",
-    width: "15%",
-  },
-  cell3: {
-      // flex: 1,
-    textAlign: "center",
-    height : 20,
-    flexDirection: "column",
-    display : "flex",
-    alignItems: "center",
-    width: "21%",
-  },
-  qty : {
-    marginHorizontal : 5,
-    paddingHorizontal : 5,
-  },
-  cell4: {
-    //   flex: 1,
-    textAlign: "center",
-    width: "22%",
-  },
-  cell5: {
-    //   flex: 1,
-    textAlign: "center",
-    width: "12%",
-    display: "flex",
     justifyContent: "center",
-    alignContent: "center",
-    //   paddingRight : 2
   },
-  delete: {
-    // marginTop : "-10px"
-    // textAlign: 'center',
+  cellContent: {
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
   },
   btn: {
     paddingVertical: 10,
@@ -176,7 +261,7 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "space-around",
     flexDirection: "row",
-    marginBottom: 10,
+    paddingBottom: 10,
   },
   save: {
     color: "white",
@@ -184,8 +269,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   noData: {
-    // textAlign: "center",
-    // flex : 1,
     display: "flex",
     justifyContent: "center",
     height: "88%",

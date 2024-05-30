@@ -20,10 +20,8 @@ export default function BarcodeScanners({ navigation }) {
   const increaseQty = (item) => {
     let data = [...data1]
     let newData = data?.map(v => v?.id == item?.id ? {
-      name: v?.name,
-      price: v?.price,
+      ...v,
       quantity: v?.quantity + 1,
-      id: v?.id,
     } : v)
     console.log('newData', newData)
     setData(newData)
@@ -31,10 +29,8 @@ export default function BarcodeScanners({ navigation }) {
   const decreaseQty = (item) => {
     let data = [...data1]
     let newData = data?.map(v => v?.id == item?.id ? {
-      name: v?.name,
-      price: v?.price,
+      ...v,
       quantity: v?.quantity - 1,
-      id: v?.id,
     } : v)
     setData(newData)
   }
@@ -46,10 +42,8 @@ export default function BarcodeScanners({ navigation }) {
       let newData = data1?.map((v) =>
         v?.name == data
           ? {
-              name: data,
-              price: v?.price,
+              ...v,
               quantity: v?.quantity + 1,
-              id: v?.id,
             }
           : v
       );
@@ -62,6 +56,7 @@ export default function BarcodeScanners({ navigation }) {
           price: Math.floor(Math.random() * 100) + 1,
           quantity: 1,
           id: String(Math.floor(Math.random() * 1000000)).padStart(6, "0"),
+          gst: 0
         },
       ]);
     }
