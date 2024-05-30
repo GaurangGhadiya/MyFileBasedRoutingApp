@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import {
   DataTable,
+  Divider,
   IconButton,
   MD3Colors,
   PaperProvider,
@@ -28,6 +29,8 @@ const ScannedDataScreen = (props) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [visible, setVisible] = React.useState(false);
   const [visibleGst, setVisibleGst] = useState(false)
+
+  console.log(props?.data1)
 
   const showDialog = (item) => {
     setVisible(true);
@@ -76,7 +79,6 @@ const ScannedDataScreen = (props) => {
           }
         : v
     );
-    console.log("newData", newData);
     props.setData(newData);
     hideDialog();
   };
@@ -101,7 +103,8 @@ const ScannedDataScreen = (props) => {
       <View style={styles.main}>
         {props?.data1?.length > 0 ? (
           <View style={styles.container}>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <ScrollView vertical showsVerticalScrollIndicator>
+            <ScrollView horizontal  showsHorizontalScrollIndicator={false}>
               <DataTable>
                 <DataTable.Header>
                   {headers.map((header, index) => (
@@ -135,33 +138,33 @@ const ScannedDataScreen = (props) => {
                       style={[styles.cell, { width: headers[2].width }]}
                       contentStyle={styles.cellContent}
                     >
-                      {item.price}
+                      {item.price?.toFixed(2)}
                     </DataTable.Cell>
                     <DataTable.Cell
                       style={[styles.cell, { width: headers[3].width }]}
                       contentStyle={styles.cellContent}
                     >
-                      {+item?.price * +item?.quantity}
+                      {(+item?.price * +item?.quantity)?.toFixed(2)}
                     </DataTable.Cell>
                     <DataTable.Cell
                       style={[styles.cell, { width: headers[4].width }]}
                       contentStyle={styles.cellContent}
                       onPress={() => showDialogGst(item)}
                     >
-                      {item?.gst} {"(0 %)"}
+                      {item?.gst == 0 ? 0 : ((+item?.price * +item?.quantity)*(item.gst/100))?.toFixed(2)}  ({item?.gst == 0 ? 0 :item?.gst/2}%)
                     </DataTable.Cell>
                     <DataTable.Cell
                       style={[styles.cell, { width: headers[5].width }]}
                       contentStyle={styles.cellContent}
                       onPress={() => showDialogGst(item)}
                     >
-                      {item?.gst} {"(0 %)"}
+                      {item?.gst == 0 ? 0 : ((+item?.price * +item?.quantity)*(item.gst/100))?.toFixed(2)}  ({item?.gst == 0 ? 0 :item?.gst/2}%)
                     </DataTable.Cell>
                     <DataTable.Cell
                       style={[styles.cell, { width: headers[6].width }]}
                       contentStyle={styles.cellContent}
                     >
-                      10000
+                      {item?.gst == 0 ?  (+item?.price * +item?.quantity)?.toFixed(2) : ((+item?.price * +item?.quantity)+((+item?.price * +item?.quantity)*(item.gst/100)*2))?.toFixed(2)}
                     </DataTable.Cell>
                  
                     
@@ -180,14 +183,77 @@ const ScannedDataScreen = (props) => {
                 ))}
                 <DataTable.Row >
                 <DataTable.Cell
-                  style={[{ width: 95 }]}
+                  style={[ { width: headers[0].width }]}
                   contentStyle={styles.cellContent}
                 >
-                  500₹
+                                    <Text style={styles.cell1}>Total</Text>
+
+                </DataTable.Cell>
+                <DataTable.Cell
+                  style={[styles.cell, { width: headers[1].width }]}
+                  contentStyle={styles.cellContent}
+                >
+                                    <Text style={styles.cell1}>{props?.data1?.reduce((value, total) => {return value + total?.quantity}, 0)}</Text>
+
+                </DataTable.Cell>
+                <DataTable.Cell
+                  style={[styles.cell1, { width: headers[2].width, fontWeight : 'bold' }]}
+                  contentStyle={styles.cellContent}
+                >
+                </DataTable.Cell>
+                <DataTable.Cell
+                  style={[styles.cell, { width: headers[3].width }]}
+                  contentStyle={styles.cellContent}
+                >
+                  <Text style={styles.cell1}>{props?.data1?.reduce((value, total) => {return value + (total.price * total.quantity)}, 0)?.toFixed(2)}</Text>
+                </DataTable.Cell>
+                <DataTable.Cell
+                  style={[styles.cell, { width: headers[4].width }]}
+                  contentStyle={styles.cellContent}
+                  >
+                  <Text style={styles.cell1}>{props?.data1?.reduce((value, total) => {return value + (((+total?.price * +total?.quantity)*(total.gst/100)))}, 0)?.toFixed(2)}</Text>
+                </DataTable.Cell>
+                <DataTable.Cell
+                  style={[styles.cell, { width: headers[5].width }]}
+                  contentStyle={styles.cellContent}
+                >
+                <Text style={styles.cell1}>{props?.data1?.reduce((value, total) => {return value + (((+total?.price * +total?.quantity)*(total.gst/100)))}, 0)?.toFixed(2)}</Text>
+                </DataTable.Cell>
+                <DataTable.Cell
+                  style={[styles.cell, { width: headers[6].width }]}
+                  contentStyle={styles.cellContent}
+                >
+                 <Text style={styles.cell1}> {props?.data1?.reduce((value, total) => {return value + ((+total?.price * +total?.quantity)+((+total?.price * +total?.quantity)*(total.gst/100)*2))}, 0)?.toFixed(2)}</Text>
+
+                </DataTable.Cell>
+                <DataTable.Cell
+                  style={[styles.cell, { width: headers[7].width }]}
+                  contentStyle={styles.cellContent}
+                >
                 </DataTable.Cell>
                 </DataTable.Row>
               </DataTable>
             </ScrollView>
+        </ScrollView>
+            
+
+            <View style={styles.bottom}>
+            <Divider />
+              <View style={styles.hori}>
+              <Text style={styles.head}>Taxable Amount</Text>
+              <Text style={styles.val}>{props?.data1?.reduce((value, total) => {return value + (total.price * total.quantity)}, 0)?.toFixed(2)}₹</Text></View>
+              <View style={styles.hori}>
+              <Text style={styles.head}>Total Tax</Text>
+              <Text style={styles.val}>{props?.data1?.reduce((value, total) => {return value + (((+total?.price * +total?.quantity)*(total.gst/100)))}, 0)?.toFixed(2)*2}₹</Text>
+              </View>
+              <View style={styles.hori}>
+              <Text style={styles.head}>Invoice Total</Text>
+              <Text style={styles.val}>{props?.data1?.reduce((value, total) => {return value + ((+total?.price * +total?.quantity)+((+total?.price * +total?.quantity)*(total.gst/100)*2))}, 0)?.toFixed(2)}₹</Text>
+              </View>
+             
+              <Divider />
+              </View>
+
           </View>
         ) : (
           <View style={styles.noData}>
@@ -241,19 +307,25 @@ const styles = StyleSheet.create({
   headerText: {
     fontWeight: "bold",
     textAlign: "left",
-    fontSize: 15,
+    fontSize: 16,
   },
   cell: {
     justifyContent: "center",
   },
+  cell1: {
+    fontWeight: "bold",
+    fontSize: 15,
+    justifyContent: "center",
+  },
   cellContent: {
+
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
   },
   btn: {
     paddingVertical: 10,
-    width: "45%",
+    width: "40%",
     backgroundColor: "blue",
     borderRadius: 15,
   },
@@ -261,7 +333,7 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "space-around",
     flexDirection: "row",
-    paddingBottom: 10,
+    paddingBottom: 15,
   },
   save: {
     color: "white",
@@ -277,4 +349,25 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
   },
+  bottom : {
+    padding : 20
+  },
+  hori : {
+    display : "flex",
+    justifyContent : "flex-end",
+    alignItems : "end",
+    flexDirection : "row",
+    marginVertical : 10
+  },
+  head  :{
+    fontWeight : "bold",
+    fontSize : 17
+  },
+  val : {
+    width : 100,
+    fontWeight : "bold",
+    fontSize : 17,
+    textAlign : "right"
+    // marginLeft : 100
+  }
 });
