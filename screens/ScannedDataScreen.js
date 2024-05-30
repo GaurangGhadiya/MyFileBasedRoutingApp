@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { View, ScrollView, StyleSheet, TouchableOpacity, Text as RNText, Alert } from "react-native";
 import {
   DataTable,
   Divider,
@@ -12,15 +12,18 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 import QuantityManage from "../components/QuantityManage";
 import GstManage from "../components/GstManage";
+import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+
 
 const headers = [
   { key: "name", label: "Name", width: 130 },
   { key: "quantity", label: "Quantity", width: 80 },
-  { key: "price", label: "Price (₹)", width: 70 },
-  { key: "totalPrice", label: "Taxable Value (₹)", width: 125 },
+  { key: "price", label: "Price (₹)", width: 90 },
+  { key: "totalPrice", label: "Taxable Value (₹)", width: 135 },
   { key: "cgst", label: "CGST (₹)", width: 95 },
-  { key: "sgst", label: "SGST (₹)", width: 95 },
-  { key: "total", label: "Total (₹)", width: 95 },
+  { key: "sgst", label: "SGST (₹)", width: 90 },
+  { key: "total", label: "Total (₹)", width: 90 },
   { key: "action", label: "Action", width: 50 },
 ];
 
@@ -260,17 +263,26 @@ const ScannedDataScreen = (props) => {
             <Text style={styles.noDataText}>No Data Found!</Text>
           </View>
         )}
-        <View style={styles.btns}>
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() => props.setScanned(false)}
-          >
-            <Text style={styles.save}>Scan Again</Text>
+
+        <View style={styles.tabbar}>
+          <TouchableOpacity style={styles.singleTab} onPress={() => props.setScanned(false)}>
+            <Icon name="barcode-scan" size={26} />
+            <RNText style={styles.tabTitle} >Scan Again</RNText>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn}>
-            <Text style={styles.save}>Save</Text>
+          <TouchableOpacity style={styles.singleTab} onPress={() => Alert.alert("Bill Saved!")}>
+          <Icon name="content-save-outline" size={26} />
+
+          <RNText style={styles.tabTitle}>Save</RNText>
+
+          </TouchableOpacity>
+            
+          <TouchableOpacity style={styles.singleTab}>
+            <Icon name="rotate-3d-variant" size={26} />
+
+          <RNText style={styles.tabTitle}>Change</RNText>
           </TouchableOpacity>
         </View>
+       
         <DeleteConfirmationModal
           isVisible={isModalVisible}
           onConfirm={handleDelete}
@@ -369,5 +381,23 @@ const styles = StyleSheet.create({
     fontSize : 17,
     textAlign : "right"
     // marginLeft : 100
+  },
+  tabbar : {
+    display : "flex", 
+    justifyContent : "space-around",
+    flexDirection : "row",
+    marginBottom : 10,
+  },
+  tabTitle : {
+    textAlign : "center",
+    justifyContent : "center",
+    alignItems : "center",
+    marginTop : 3
+  },
+  singleTab :{
+    textAlign : "center",
+    display : "flex",
+    justifyContent : "center",
+    alignItems : "center",
   }
 });
