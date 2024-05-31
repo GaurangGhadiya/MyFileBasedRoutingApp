@@ -11,8 +11,10 @@ const Data = [
       {
         id: '2',
         title: 'Barcode Scanner',
-        redirect: 'BarcodeScanner'}
+        redirect: 'NewBill'}
+        // redirect: 'BarcodeScanner'}
     ]
+    // ]
 
     const gap = 18;
 
@@ -29,13 +31,8 @@ export default function HomeScreen({ navigation }) {
               return (
                 <TouchableOpacity
                   style={styles.card}
-                  onPress={() => { 
-                    // if (isLoaded) {
-                    //   show();
-                    //   setRedirectPath(item?.redirect)
-                    // } else {
+                  onPress={() => {
                       navigation.navigate(item?.redirect)
-                    // }
 
                    }}>
                  
@@ -43,10 +40,6 @@ export default function HomeScreen({ navigation }) {
                 </TouchableOpacity>
               );
             }}
-            // horizontal
-            // numColumns={3}
-            // contentContainerStyle={{gap}}
-            // columnWrapperStyle={{gap}}
           />
         </View>
        
