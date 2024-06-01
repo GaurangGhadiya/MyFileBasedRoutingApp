@@ -1,4 +1,6 @@
 import {
+  Image,
+  ImageBackground,
   StyleSheet,
   Text,
   TextInput,
@@ -19,8 +21,12 @@ const LoginSchema = Yup.object().shape({
 
 const Login = ({navigation}) => {
   return (
+    <>
+    {/* <ImageBackground source={require('../assets/bubal.png')} style={styles.backgroundImage} >  */}
     <View style={styles.main}>
-      <Text style={styles.welcome}>Welcome!</Text>
+      
+
+      <Text style={styles.welcome}>Welcome 👋!</Text>
       <Text style={styles.login}>Login</Text>
       <Text style={styles.desc}>To Your Account</Text>
       <Formik
@@ -80,6 +86,8 @@ const Login = ({navigation}) => {
         )}
       </Formik>
     </View>
+      {/* </ImageBackground> */}
+    </>
   );
 };
 
@@ -87,10 +95,12 @@ export default Login;
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1,
+    // flex: 1,s
     justifyContent: "center",
-    backgroundColor: "white",
+    // backgroundColor: "white",
     paddingHorizontal: 30,
+    height: "100%",
+
   },
   mainInput: {
     marginBottom: 20,
@@ -139,4 +149,10 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     color: "#0A8ADC",
   },
+  backgroundImage : {
+    // flex : 1,
+    resizeMode: "center",
+    // justifyContent: "center",
+    // alignItems: "center",
+  }
 });
