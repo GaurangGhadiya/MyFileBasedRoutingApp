@@ -1,8 +1,8 @@
 // App.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import HomeScreen from './screens/HomeScreen';
 import BarcodeGenerator from './screens/BarcodeGeneratorScreen';
 import BarcodeScanners from './screens/BarcodeScannerScreen';
@@ -19,6 +19,7 @@ import NewBillScreen from './screens/NewBillScreen';
 // const screens = require.context('./screens', true, /\.js$/);
 
 const Stack = createNativeStackNavigator();
+
 function HomeHeaderRight() {
   const navigation = useNavigation();
 
@@ -38,8 +39,23 @@ function HomeHeaderRight() {
   );
 }
 
+const SplashScreen = () => (
+  <View style={styles.container}>
+ <Icon name="barcode-scan" size={100} color={"#0A8ADC"}/>
+    {/* <Image source={require('./src/assets/logo.png')} style={styles.image} /> */}
+  </View>
+);
+
 export default function App() {
-  return (
+  const [splashVisible, setSplashVisible] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setSplashVisible(false);
+    }, 1000); // Change the duration as needed
+  }, []);
+
+  return (splashVisible ? <SplashScreen /> :  
     <>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
@@ -81,3 +97,18 @@ export default function App() {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    // backgroundColor: '#00B386',
+  },
+  image: {
+    width: 150,
+    height: 150,
+    resizeMode: 'contain',
+  },
+})
