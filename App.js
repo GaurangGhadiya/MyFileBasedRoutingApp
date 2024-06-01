@@ -1,5 +1,5 @@
 // App.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Image, StyleSheet, Text, View } from 'react-native';
@@ -13,6 +13,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-toast-message';
 import toastConfig from './utils/customToastConfig';
 import NewBillScreen from './screens/NewBillScreen';
+import * as Animatable from 'react-native-animatable';
+
 
 
 // Automatically import all screen components
@@ -40,8 +42,15 @@ function HomeHeaderRight() {
 }
 
 const SplashScreen = () => (
-  <View style={styles.container}>
- <Icon name="barcode-scan" size={100} color={"#0A8ADC"}/>
+ <View style={styles.container}>
+    <Animatable.View
+      animation="pulse"
+      easing="ease-out"
+      iterationCount="infinite"
+      style={styles.iconContainer}
+    >
+      <Icon name="barcode-scan" size={100} color={"#0A8ADC"} />
+    </Animatable.View>
     {/* <Image source={require('./src/assets/logo.png')} style={styles.image} /> */}
   </View>
 );
@@ -52,8 +61,11 @@ export default function App() {
   useEffect(() => {
     setTimeout(() => {
       setSplashVisible(false);
-    }, 1000); // Change the duration as needed
+    }, 2000); // Change the duration as needed
   }, []);
+
+ 
+
 
   return (splashVisible ? <SplashScreen /> :  
     <>
@@ -93,7 +105,7 @@ export default function App() {
         
       </Stack.Navigator>
     </NavigationContainer>
-    <Toast ref={(ref) => Toast.setRef(ref)} config={toastConfig} position="bottom"/>
+    <Toast  config={toastConfig} position="bottom" />
     </>
   );
 }
@@ -110,5 +122,9 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     resizeMode: 'contain',
+  },
+  iconContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
