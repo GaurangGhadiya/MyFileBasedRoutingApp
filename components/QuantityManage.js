@@ -24,7 +24,7 @@ const QuantityManage = ({ hideDialog, visible, selectedItem,handleChangeQty }) =
   return (
     <View>
       <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog}>
+        <Dialog visible={visible} onDismiss={hideDialog} style={{backgroundColor : "white", borderRadius : 10}}>
           {/* <Dialog.Title>Alert</Dialog.Title> */}
           <Dialog.Content>
             <Text variant="bodyMedium">
@@ -34,7 +34,7 @@ const QuantityManage = ({ hideDialog, visible, selectedItem,handleChangeQty }) =
               <TouchableOpacity style={styles.btn} onPress={() => decrementQuantity()}>
               <IconButton
     icon="minus"
-    iconColor={"white"}
+    iconColor={"#0A8ADC"}
     size={20}
     
   />
@@ -43,7 +43,7 @@ const QuantityManage = ({ hideDialog, visible, selectedItem,handleChangeQty }) =
               <TouchableOpacity style={styles.btn} onPress={() => incrementQuantity()}>
               <IconButton
     icon="plus"
-    iconColor={"white"}
+    iconColor={"#0A8ADC"}
     size={20}
     
   />
@@ -52,8 +52,8 @@ const QuantityManage = ({ hideDialog, visible, selectedItem,handleChangeQty }) =
             </View>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={hideDialog}>Cancel</Button>
-            <Button onPress={() => handleChangeQty({...selectedItem, quantity})}>Save</Button>
+            <Button onPress={hideDialog} textColor="#0A8ADC">Cancel</Button>
+            <Button onPress={() => handleChangeQty({...selectedItem, quantity})} textColor="#0A8ADC">Save</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
@@ -86,9 +86,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   btn  : {
-    backgroundColor : "green",
-    paddingHorizontal: 20,
-    borderRadius : 15,
+    borderColor : "#0A8ADC",
+    borderWidth : 1,
+    borderRadius : 10,
+    height : 40,
+    alignItems : "center",
+    justifyContent : "center",
+    display : "flex",
     
   }
 });

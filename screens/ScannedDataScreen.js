@@ -14,15 +14,16 @@ import QuantityManage from "../components/QuantityManage";
 import GstManage from "../components/GstManage";
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import ChangeCalculate from "../components/ChangeCalculate";
 
 
 const headers = [
   { key: "name", label: "Name", width: 130 },
-  { key: "quantity", label: "Quantity", width: 80 },
+  { key: "quantity", label: "Quantity", width: 90 },
   { key: "price", label: "Price (₹)", width: 90 },
-  { key: "totalPrice", label: "Taxable Value (₹)", width: 135 },
-  { key: "cgst", label: "CGST (₹)", width: 95 },
-  { key: "sgst", label: "SGST (₹)", width: 90 },
+  { key: "totalPrice", label: "Taxable Value (₹)", width: 140 },
+  { key: "cgst", label: "CGST (₹)", width: 120 },
+  { key: "sgst", label: "SGST (₹)", width: 100 },
   { key: "total", label: "Total (₹)", width: 90 },
   { key: "action", label: "Action", width: 50 },
 ];
@@ -32,6 +33,7 @@ const ScannedDataScreen = (props) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [visible, setVisible] = React.useState(false);
   const [visibleGst, setVisibleGst] = useState(false)
+  const [visibleChange, setVisibleChange] = useState(false)
 
   console.log(props?.data1)
 
@@ -52,6 +54,15 @@ const ScannedDataScreen = (props) => {
   const hideDialogGst = () => {
     setVisibleGst(false);
     setSelectedItem(null);
+  };
+  const showDialogChange = (item) => {
+    setVisibleChange(true);
+    // setSelectedItem(item);
+  };
+
+  const hideDialogChange = () => {
+    setVisibleChange(false);
+    // setSelectedItem(null);
   };
 
   const openModal = (item) => {
@@ -135,7 +146,14 @@ const ScannedDataScreen = (props) => {
                       contentStyle={styles.cellContent}
                       onPress={() => showDialog(item)}
                     >
-                      {item.quantity}
+                       <View>
+    <Text style={{textAlign : "center"}}>
+    {item.quantity} <Icon name="pencil" size={15}  color="#0A8ADC"/>
+    </Text>
+ 
+    
+  </View>
+
                     </DataTable.Cell>
                     <DataTable.Cell
                       style={[styles.cell, { width: headers[2].width }]}
@@ -150,19 +168,36 @@ const ScannedDataScreen = (props) => {
                       {(+item?.price * +item?.quantity)?.toFixed(2)}
                     </DataTable.Cell>
                     <DataTable.Cell
-                      style={[styles.cell, { width: headers[4].width }]}
-                      contentStyle={styles.cellContent}
-                      onPress={() => showDialogGst(item)}
-                    >
-                      {item?.gst == 0 ? 0 : ((+item?.price * +item?.quantity)*(item.gst/100))?.toFixed(2)}  ({item?.gst == 0 ? 0 :item?.gst/2}%)
-                    </DataTable.Cell>
-                    <DataTable.Cell
-                      style={[styles.cell, { width: headers[5].width }]}
-                      contentStyle={styles.cellContent}
-                      onPress={() => showDialogGst(item)}
-                    >
-                      {item?.gst == 0 ? 0 : ((+item?.price * +item?.quantity)*(item.gst/100))?.toFixed(2)}  ({item?.gst == 0 ? 0 :item?.gst/2}%)
-                    </DataTable.Cell>
+  style={[styles.cell, { width: headers[4].width }]}
+  contentStyle={styles.cellContent}
+  onPress={() => showDialogGst(item)}
+>
+  <View>
+    <Text style={{textAlign : "center"}}>
+      {item?.gst == 0 ? 0 : ((+item?.price * +item?.quantity) * (item.gst / 100))?.toFixed(2)} 
+    </Text>
+    <Text style={{textAlign : "center"}}>
+      ({item?.gst == 0 ? 0 : item?.gst / 2}%)  <Icon name="pencil" size={15} color="#0A8ADC" />
+    </Text>
+    
+  </View>
+</DataTable.Cell>
+
+<DataTable.Cell
+  style={[styles.cell, { width: headers[5].width }]}
+  contentStyle={styles.cellContent}
+  onPress={() => showDialogGst(item)}
+>
+  <View>
+    <Text style={{textAlign : "center"}}>
+      {item?.gst == 0 ? 0 : ((+item?.price * +item?.quantity) * (item.gst / 100))?.toFixed(2)} 
+    </Text>
+    <Text style={{textAlign : "center"}}>
+      ({item?.gst == 0 ? 0 : item?.gst / 2}%)  <Icon name="pencil" size={15} color="#0A8ADC" />
+    </Text>
+    
+  </View>
+</DataTable.Cell>
                     <DataTable.Cell
                       style={[styles.cell, { width: headers[6].width }]}
                       contentStyle={styles.cellContent}
@@ -266,18 +301,18 @@ const ScannedDataScreen = (props) => {
 
         <View style={styles.tabbar}>
           <TouchableOpacity style={styles.singleTab} onPress={() => props.setScanned(false)}>
-            <Icon name="barcode-scan" size={26} />
+            <Icon name="barcode-scan" size={26} color={"#0A8ADC"}/>
             <RNText style={styles.tabTitle} >Scan Again</RNText>
           </TouchableOpacity>
           <TouchableOpacity style={styles.singleTab} onPress={() => Alert.alert("Bill Saved!")}>
-          <Icon name="content-save-outline" size={26} />
+          <Icon name="content-save-outline" size={26} color={"#0A8ADC"}/>
 
           <RNText style={styles.tabTitle}>Save</RNText>
 
           </TouchableOpacity>
             
-          <TouchableOpacity style={styles.singleTab}>
-            <Icon name="rotate-3d-variant" size={26} />
+          <TouchableOpacity style={styles.singleTab} onPress={() => showDialogChange()}>
+            <Icon name="rotate-3d-variant" size={26} color={"#0A8ADC"}/>
 
           <RNText style={styles.tabTitle}>Change</RNText>
           </TouchableOpacity>
@@ -300,6 +335,11 @@ const ScannedDataScreen = (props) => {
         selectedItem={selectedItem}
         handleChangeGst={handleChangeGst}
         />
+        <ChangeCalculate 
+          hideDialog={hideDialogChange}
+          visible={visibleChange}
+          price={props?.data1?.reduce((value, total) => {return value + ((+total?.price * +total?.quantity)+((+total?.price * +total?.quantity)*(total.gst/100)*2))}, 0)?.toFixed(2)}
+          />
       </View>
     </PaperProvider>
   );
@@ -392,7 +432,8 @@ const styles = StyleSheet.create({
     textAlign : "center",
     justifyContent : "center",
     alignItems : "center",
-    marginTop : 3
+    marginTop : 3,
+    // color: "#0A8ADC"
   },
   singleTab :{
     textAlign : "center",

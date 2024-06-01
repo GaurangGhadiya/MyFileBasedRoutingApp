@@ -5,12 +5,12 @@ import { View, Text, Button, StyleSheet, TouchableOpacity, FlatList } from 'reac
 const Data = [
     {
       id: '1',
-      title: 'Barcode Generator',
+      title: 'Create New Barcode',
       redirect: 'BarcodeGenerator'},
 
       {
         id: '2',
-        title: 'Barcode Scanner',
+        title: 'Create a New Bill',
         redirect: 'NewBill'}
         // redirect: 'BarcodeScanner'}
     ]

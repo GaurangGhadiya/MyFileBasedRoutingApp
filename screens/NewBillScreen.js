@@ -25,7 +25,7 @@ import {
        <Text style={styles.title}>Enter customer details</Text>
         <Formik
           initialValues={{ name: "", mobile: "" ,address:""}}
-          validationSchema={LoginSchema}
+          // validationSchema={LoginSchema}
           onSubmit={(values, { resetForm }) => {
             console.log(values);
             resetForm()

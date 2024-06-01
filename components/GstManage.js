@@ -4,10 +4,7 @@ import {
   Button,
   Dialog,
   Portal,
-  PaperProvider,
   Text,
-  IconButton,
-  MD3Colors,
   RadioButton,
 } from "react-native-paper";
 
@@ -22,7 +19,7 @@ const GstManage = ({ hideDialog, visible, selectedItem,handleChangeGst }) => {
   return (
     <View>
       <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog}>
+        <Dialog visible={visible} onDismiss={hideDialog} style={{backgroundColor : "white", borderRadius : 10}}>
           {/* <Dialog.Title>Alert</Dialog.Title> */}
           <Dialog.Content>
             <Text variant="bodyMedium">
@@ -52,8 +49,8 @@ const GstManage = ({ hideDialog, visible, selectedItem,handleChangeGst }) => {
     </RadioButton.Group>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={hideDialog}>Cancel</Button>
-            <Button onPress={() => handleChangeGst({...selectedItem, quantity})}>Save</Button>
+            <Button onPress={hideDialog} textColor="#0A8ADC">Cancel</Button>
+            <Button onPress={() => handleChangeGst({...selectedItem, quantity})} textColor="#0A8ADC">Save</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
