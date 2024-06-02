@@ -23,11 +23,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.gaurang007.myfilebasedroutingapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": "myfilebasedroutingapp"
+    "scheme": "myfilebasedroutingapp",
+    "extra": {
+      "eas": {
+        "projectId": "ac7847b8-3867-4a1a-a733-c0d75739d032"
+      }
+    }
   }
 }
