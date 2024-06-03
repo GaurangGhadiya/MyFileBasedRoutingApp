@@ -60,10 +60,11 @@ const GeneratedDataScreen = ({ data, setIsGenerated, setdata }) => {
     setMode(mode);
   };
 
-  const handleDelete = (item) => {
+  const handleDelete = () => {
     let data1 = [...data];
-    let newData = data1?.filter((v) => v?.name !== item?.name);
+    let newData = data1?.filter((v) => v?.name !== selectedItem?.name);
     setdata(newData);
+    closeModal()
   };
   return (
     <PaperProvider>
@@ -343,6 +344,7 @@ const styles = StyleSheet.create({
   noDataText: {
     fontSize: 18,
     textAlign: "center",
+    color: "black",
   },
   bottom: {
     padding: 20,
