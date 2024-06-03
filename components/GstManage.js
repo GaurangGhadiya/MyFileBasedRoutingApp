@@ -22,29 +22,29 @@ const GstManage = ({ hideDialog, visible, selectedItem,handleChangeGst }) => {
         <Dialog visible={visible} onDismiss={hideDialog} style={{backgroundColor : "white", borderRadius : 10}}>
           {/* <Dialog.Title>Alert</Dialog.Title> */}
           <Dialog.Content>
-            <Text variant="bodyMedium">
+            <Text style={styles.cb} variant="bodyMedium">
               Are you sure you want to change the GST of {selectedItem?.name}? Current GST is {selectedItem?.gst?.toString()}.
             </Text>
             <RadioButton.Group onValueChange={newValue => setQuantity(newValue)} value={quantity?.toString()}>
       <View style={styles.quantityContainer}>
         <RadioButton value="0" />
-        <Text>0%</Text>
+        <Text style={styles.cb}>0%</Text>
       </View>
       <View style={styles.quantityContainer}>
         <RadioButton value="5" />
-        <Text>5%</Text>
+        <Text style={styles.cb}>5%</Text>
       </View>
       <View style={styles.quantityContainer}>
         <RadioButton value="12" />
-        <Text>12%</Text>
+        <Text style={styles.cb}>12%</Text>
       </View>
       <View style={styles.quantityContainer}>
         <RadioButton value="18" />
-        <Text>18%</Text>
+        <Text style={styles.cb}>18%</Text>
       </View>
       <View style={styles.quantityContainer}>
         <RadioButton value="28" />
-        <Text>28%</Text>
+        <Text style={styles.cb}>28%</Text>
       </View>
     </RadioButton.Group>
           </Dialog.Content>
@@ -87,5 +87,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius : 15,
     
+  },
+  cb : {
+    color : "black"
   }
 });

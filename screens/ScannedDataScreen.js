@@ -139,7 +139,7 @@ const ScannedDataScreen = (props) => {
                       style={[{ width: headers[0].width }]}
                       contentStyle={styles.cellContent}
                     >
-                      {item.name}
+                      <Text style={styles.cb}>{item.name}</Text>
                     </DataTable.Cell>
                     <DataTable.Cell
                       style={[styles.cell, { width: headers[1].width }]}
@@ -147,7 +147,7 @@ const ScannedDataScreen = (props) => {
                       onPress={() => showDialog(item)}
                     >
                        <View>
-    <Text style={{textAlign : "center"}}>
+    <Text style={[styles.cb,{textAlign : "center"}]}>
     {item.quantity} <Icon name="pencil" size={15}  color="#0A8ADC"/>
     </Text>
  
@@ -159,13 +159,13 @@ const ScannedDataScreen = (props) => {
                       style={[styles.cell, { width: headers[2].width }]}
                       contentStyle={styles.cellContent}
                     >
-                      {item.price?.toFixed(2)}
+                      <Text style={styles.cb}>{item.price?.toFixed(2)}</Text>
                     </DataTable.Cell>
                     <DataTable.Cell
                       style={[styles.cell, { width: headers[3].width }]}
                       contentStyle={styles.cellContent}
                     >
-                      {(+item?.price * +item?.quantity)?.toFixed(2)}
+                      <Text style={styles.cb}>{(+item?.price * +item?.quantity)?.toFixed(2)}</Text>
                     </DataTable.Cell>
                     <DataTable.Cell
   style={[styles.cell, { width: headers[4].width }]}
@@ -173,10 +173,10 @@ const ScannedDataScreen = (props) => {
   onPress={() => showDialogGst(item)}
 >
   <View>
-    <Text style={{textAlign : "center"}}>
+    <Text style={[styles.cb,{textAlign : "center"}]}>
       {item?.gst == 0 ? 0 : ((+item?.price * +item?.quantity) * (item.gst / 100))?.toFixed(2)} 
     </Text>
-    <Text style={{textAlign : "center"}}>
+    <Text style={[styles.cb,{textAlign : "center"}]}>
       ({item?.gst == 0 ? 0 : item?.gst / 2}%)  <Icon name="pencil" size={15} color="#0A8ADC" />
     </Text>
     
@@ -189,10 +189,10 @@ const ScannedDataScreen = (props) => {
   onPress={() => showDialogGst(item)}
 >
   <View>
-    <Text style={{textAlign : "center"}}>
+    <Text style={[styles.cb,{textAlign : "center"}]}>
       {item?.gst == 0 ? 0 : ((+item?.price * +item?.quantity) * (item.gst / 100))?.toFixed(2)} 
     </Text>
-    <Text style={{textAlign : "center"}}>
+    <Text style={[styles.cb,{textAlign : "center"}]}>
       ({item?.gst == 0 ? 0 : item?.gst / 2}%)  <Icon name="pencil" size={15} color="#0A8ADC" />
     </Text>
     
@@ -202,7 +202,7 @@ const ScannedDataScreen = (props) => {
                       style={[styles.cell, { width: headers[6].width }]}
                       contentStyle={styles.cellContent}
                     >
-                      {item?.gst == 0 ?  (+item?.price * +item?.quantity)?.toFixed(2) : ((+item?.price * +item?.quantity)+((+item?.price * +item?.quantity)*(item.gst/100)*2))?.toFixed(2)}
+                      <Text style={styles.cb}>{item?.gst == 0 ?  (+item?.price * +item?.quantity)?.toFixed(2) : ((+item?.price * +item?.quantity)+((+item?.price * +item?.quantity)*(item.gst/100)*2))?.toFixed(2)}</Text>
                     </DataTable.Cell>
                  
                     
@@ -360,6 +360,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "left",
     fontSize: 16,
+    color : "black"
   },
   cell: {
     justifyContent: "center",
@@ -368,6 +369,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 15,
     justifyContent: "center",
+    color: "black"
   },
   cellContent: {
 
@@ -400,6 +402,7 @@ const styles = StyleSheet.create({
   noDataText: {
     fontSize: 18,
     textAlign: "center",
+    color: "black",
   },
   bottom : {
     padding : 20
@@ -413,13 +416,15 @@ const styles = StyleSheet.create({
   },
   head  :{
     fontWeight : "bold",
-    fontSize : 17
+    fontSize : 17,
+    color : "black",
   },
   val : {
     width : 100,
     fontWeight : "bold",
     fontSize : 17,
-    textAlign : "right"
+    textAlign : "right",
+    color : "black",
     // marginLeft : 100
   },
   tabbar : {
@@ -440,5 +445,8 @@ const styles = StyleSheet.create({
     display : "flex",
     justifyContent : "center",
     alignItems : "center",
+  },
+  cb: {
+    color : "black"
   }
 });

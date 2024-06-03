@@ -27,7 +27,7 @@ const QuantityManage = ({ hideDialog, visible, selectedItem,handleChangeQty }) =
         <Dialog visible={visible} onDismiss={hideDialog} style={{backgroundColor : "white", borderRadius : 10}}>
           {/* <Dialog.Title>Alert</Dialog.Title> */}
           <Dialog.Content>
-            <Text variant="bodyMedium">
+            <Text variant="bodyMedium" style={styles.cb}>
               Are you sure you want to change the GST of {selectedItem?.name}? Its current GST is {selectedItem?.quantity}.
             </Text>
             <View style={styles.quantityContainer}>
@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
   quantityText: {
     fontSize: 18,
     marginHorizontal: 20,
+    color : "black",
   },
   btn  : {
     borderColor : "#0A8ADC",
@@ -94,5 +95,8 @@ const styles = StyleSheet.create({
     justifyContent : "center",
     display : "flex",
     
+  },
+  cb : {
+    color:"black"
   }
 });

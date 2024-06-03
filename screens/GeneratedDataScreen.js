@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Barcode } from "expo-barcode-generator";
+// import { Barcode } from "expo-barcode-generator";
 import {
   View,
   ScrollView,
@@ -7,52 +7,64 @@ import {
   TouchableOpacity,
   Text as RNText,
   Alert,
-  Button,
+  Image,
 } from "react-native";
 import {
   DataTable,
   Divider,
   IconButton,
-  MD3Colors,
   PaperProvider,
   Text,
 } from "react-native-paper";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import ViewBarcodeDetails from "../components/ViewBarcodeDetails";
+import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 
 const headers = [
   { key: "name", label: "Barcode", width: 110 },
   { key: "quantity", label: "Name", width: 150 },
-//   { key: "price", label: "Purchase Price (₹)", width: 140 },
-//   { key: "totalPrice", label: "Selling Price (₹)", width: 140 },
-//   { key: "totalPrice", label: "Description", width: 140 },
+  //   { key: "price", label: "Purchase Price (₹)", width: 140 },
+  //   { key: "totalPrice", label: "Selling Price (₹)", width: 140 },
+  //   { key: "totalPrice", label: "Description", width: 140 },
   { key: "action", label: "Action", width: 110 },
 ];
 
 const GeneratedDataScreen = ({ data, setIsGenerated, setdata }) => {
   console.log("data", data);
-  const [visible, setVisible] = useState(false)
-  const [dialogData, setDialogData] = useState({})
-  const [mode, setMode] = useState(null)
+  const [visible, setVisible] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+
+  const [dialogData, setDialogData] = useState({});
+  const [mode, setMode] = useState(null);
+
+  const openModal = (item) => {
+    setSelectedItem(item);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedItem(null);
+  };
 
   const hideDialog = () => {
-    setVisible(false)
-    setDialogData({})
-    setMode(null)
-  }
+    setVisible(false);
+    setDialogData({});
+    setMode(null);
+  };
   const showDialog = (item, mode) => {
-    setVisible(true)
-    setDialogData(item)
-    setMode(mode)
-  }
+    setVisible(true);
+    setDialogData(item);
+    setMode(mode);
+  };
 
   const handleDelete = (item) => {
-    let data1 = [...data]
-    let newData = data1?.filter(v => v?.name !== item.name)
-setdata(newData)
-  }
+    let data1 = [...data];
+    let newData = data1?.filter((v) => v?.name !== item?.name);
+    setdata(newData);
+  };
   return (
     <PaperProvider>
       <View style={styles.main}>
@@ -62,7 +74,7 @@ setdata(newData)
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <DataTable>
                   <DataTable.Header>
-                    {headers.map((header, index) => (
+                    {headers?.map((header, index) => (
                       <DataTable.Title
                         key={index}
                         style={{
@@ -77,10 +89,15 @@ setdata(newData)
                   {data?.map((item, index) => (
                     <DataTable.Row key={index}>
                       <DataTable.Cell
-                        style={[{ width: headers[0].width }]}
+                        style={[{ width: headers?.[0].width , paddingVertical : 10}]}
                         contentStyle={styles.cellContent}
                       >
-                        <Barcode
+                          <Image
+  source={{ uri: `https://bwipjs-api.metafloor.com/?bcid=code128&text=${item}&scale=1` }}
+  onError={(error) => console.error('Error loading image:', error)}
+  style={{ height: 50, width: 110 }} 
+/>            
+                        {/* <Barcode
                           value={JSON.stringify(item)}
                           options={{
                             format: "CODE128",
@@ -89,13 +106,13 @@ setdata(newData)
                             height: 30,
                           }}
                           style={styles.barcode}
-                        />
+                        /> */}
                       </DataTable.Cell>
                       <DataTable.Cell
-                        style={[styles.cell,{ width: headers[1].width }]}
+                        style={[styles.cell, { width: headers?.[1].width }]}
                         contentStyle={styles.cellContent}
                       >
-                        {item.name}
+                        <Text style={styles?.cb}>{item.name}</Text>
                       </DataTable.Cell>
                       {/* <DataTable.Cell
                         style={[styles.cell, { width: headers[2].width }]}
@@ -117,32 +134,32 @@ setdata(newData)
                       </DataTable.Cell> */}
 
                       <DataTable.Cell
-                        style={[styles.cell, { width: headers[2].width }]}
+                        style={[styles.cell, { width: headers?.[2].width }]}
                         contentStyle={styles.cellContent}
                       >
-                      <View style={styles.actions}>
-                      <IconButton
-                        icon="eye"
-                        iconColor={"#00A884"}
-
-                        size={24}
-                        onPress={() => showDialog(item, "view")}
-                      />
-                        <IconButton
-                        icon="pencil"
-                        style={styles.old}
-                        iconColor={"#0A8ADC"}
-                        size={24}
-                        onPress={() => showDialog(item, "edit")}   
-                   />
-                        <IconButton
-                        icon="delete"
-                        iconColor={"#d32f2f"}
-                        
-                        size={24}
-                        onPress={() => {handleDelete(item)}}
-                      />
-                      </View>
+                        <View style={styles.actions}>
+                          <IconButton
+                            icon="eye"
+                            iconColor={"#00A884"}
+                            size={24}
+                            onPress={() => showDialog(item, "view")}
+                          />
+                          <IconButton
+                            icon="pencil"
+                            style={styles.old}
+                            iconColor={"#0A8ADC"}
+                            size={24}
+                            onPress={() => showDialog(item, "edit")}
+                          />
+                          <IconButton
+                            icon="delete"
+                            iconColor={"#d32f2f"}
+                            size={24}
+                            onPress={() => {
+                              openModal(item)
+                            }}
+                          />
+                        </View>
                       </DataTable.Cell>
                     </DataTable.Row>
                   ))}
@@ -224,31 +241,39 @@ setdata(newData)
           </View>
         )}
 
-<Divider />
-<View style={styles.tabbar}>
-          <TouchableOpacity style={styles.singleTab} onPress={() => setIsGenerated(false)}>
-            <Icon name="barcode-scan" size={26} color={"#0A8ADC"}/>
-            <RNText style={styles.tabTitle} >Generate Again</RNText>
+        <Divider />
+        <View style={styles.tabbar}>
+          <TouchableOpacity
+            style={styles.singleTab}
+            onPress={() => setIsGenerated(false)}
+          >
+            <Icon name="barcode-scan" size={26} color={"#0A8ADC"} />
+            <RNText style={styles.tabTitle}>Generate Again</RNText>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.singleTab} onPress={() => Alert.alert("Barcode Saved!")}>
-          <Icon name="content-save-outline" size={26} color={"#0A8ADC"}/>
+          <TouchableOpacity
+            style={styles.singleTab}
+            onPress={() => Alert.alert("Barcode Saved!")}
+          >
+            <Icon name="content-save-outline" size={26} color={"#0A8ADC"} />
 
-          <RNText style={styles.tabTitle}>Save</RNText>
-
+            <RNText style={styles.tabTitle}>Save</RNText>
           </TouchableOpacity>
-            
-        
         </View>
       </View>
 
-<ViewBarcodeDetails
-visible={visible}
-hideDialog={hideDialog}
-dialogData={dialogData}
-mode={mode}
-setdata={setdata}
-data={data}
-/>
+      <ViewBarcodeDetails
+        visible={visible}
+        hideDialog={hideDialog}
+        dialogData={dialogData}
+        mode={mode}
+        setdata={setdata}
+        data={data}
+      />
+      <DeleteConfirmationModal 
+      isVisible={isModalVisible}
+      onConfirm={handleDelete}
+      onCancel={closeModal}
+      />
     </PaperProvider>
   );
 };
@@ -262,8 +287,8 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
   },
   barcode: {
-    width: 200, // Set your desired width
-    height: 100, // Set your desired height
+    width: 200,
+    height: 100,
   },
   main: {
     flex: 1,
@@ -275,19 +300,23 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "left",
     fontSize: 16,
+    color: "black",
   },
   cell: {
     justifyContent: "center",
+    color: "black",
   },
   cell1: {
     fontWeight: "bold",
     fontSize: 15,
     justifyContent: "center",
+    color: "black"
   },
   cellContent: {
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
+    color: "black"
   },
   btn: {
     paddingVertical: 10,
@@ -341,7 +370,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     flexDirection: "row",
     marginBottom: 10,
-    marginTop : 15
+    marginTop: 15,
   },
   tabTitle: {
     textAlign: "center",
@@ -356,14 +385,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  actions : {
+  actions: {
     display: "flex",
     alignItems: "center",
     flexDirection: "row",
   },
-  old : {
-    marginHorizontal : -10
+  old: {
+    marginHorizontal: -10,
+  },
+  cb : {
+    color: "black"
   }
 });
-
-

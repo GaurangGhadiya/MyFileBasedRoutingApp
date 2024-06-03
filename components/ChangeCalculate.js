@@ -40,7 +40,7 @@ const ChangeCalculate = ({ hideDialog, visible, price }) => {
         <Dialog visible={visible} onDismiss={hideDialog} style={{backgroundColor : "white", borderRadius : 10}}>
           {/* <Dialog.Title>Alert</Dialog.Title> */}
           <Dialog.Content>
-            <Text variant="bodyMedium">
+            <Text variant="bodyMedium" style={styles.cb}>
               Are you sure you want to calculate change of {price}₹.
             </Text>
             <View style={styles.mainInput}>
@@ -111,4 +111,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     borderRadius: 5,
   },
+  cb: {
+    color : "black"
+  }
 });
