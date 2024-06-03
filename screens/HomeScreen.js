@@ -11,12 +11,13 @@ const Data = [
       {
         id: '2',
         title: 'Create a New Bill',
-        redirect: 'NewBill'}
-        // redirect: 'BarcodeScanner'}
+        redirect: 'NewBill'},
+      {
+        id: '3',
+        title: 'Generate Order',
+        redirect: 'OrderTable'}
     ]
-    // ]
 
-    const gap = 18;
 
 
 export default function HomeScreen({ navigation }) {

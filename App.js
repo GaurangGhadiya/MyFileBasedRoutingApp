@@ -15,6 +15,10 @@ import toastConfig from "./utils/customToastConfig";
 import NewBillScreen from "./screens/NewBillScreen";
 import * as Animatable from "react-native-animatable";
 import { StatusBar } from "expo-status-bar";
+import OrderTable from "./screens/OrderTable";
+import NewOrder from "./components/NewOrder";
+import NewOrderScreen from "./screens/NewOrderScreen";
+import { Provider as PaperProvider } from 'react-native-paper';
 
 // Automatically import all screen components
 // const screens = require.context('./screens', true, /\.js$/);
@@ -67,6 +71,8 @@ export default function App() {
     <SplashScreen />
   ) : (
     <>
+        <PaperProvider>
+
       <StatusBar style="auto" />
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
@@ -103,6 +109,16 @@ export default function App() {
             options={{ headerTitle: "Create New Bill" }}
           />
           <Stack.Screen
+            name="NewOrder"
+            component={NewOrderScreen}
+            options={{ headerTitle: "Create Order" }}
+          />
+          <Stack.Screen
+            name="OrderTable"
+            component={OrderTable}
+            options={{ headerTitle: "Orders",headerRight: () => <NewOrder />, }}
+          />
+          <Stack.Screen
             name="Login"
             component={Login}
             options={{ headerShown: false }}
@@ -111,6 +127,7 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
       <Toast config={toastConfig} position="bottom" />
+      </PaperProvider>
     </>
   );
 }
