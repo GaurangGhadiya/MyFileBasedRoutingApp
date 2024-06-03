@@ -35,7 +35,6 @@ const GeneratedDataScreen = ({ data, setIsGenerated, setdata }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
-
   const [dialogData, setDialogData] = useState({});
   const [mode, setMode] = useState(null);
 
@@ -64,7 +63,7 @@ const GeneratedDataScreen = ({ data, setIsGenerated, setdata }) => {
     let data1 = [...data];
     let newData = data1?.filter((v) => v?.name !== selectedItem?.name);
     setdata(newData);
-    closeModal()
+    closeModal();
   };
   return (
     <PaperProvider>
@@ -90,14 +89,21 @@ const GeneratedDataScreen = ({ data, setIsGenerated, setdata }) => {
                   {data?.map((item, index) => (
                     <DataTable.Row key={index}>
                       <DataTable.Cell
-                        style={[{ width: headers?.[0].width , paddingVertical : 10}]}
+                        style={[
+                          { width: headers?.[0].width, paddingVertical: 10 },
+                        ]}
                         contentStyle={styles.cellContent}
                       >
-                          <Image
-  source={{ uri: `https://bwipjs-api.metafloor.com/?bcid=code128&text=${item}&scale=1` }}
-  onError={(error) => console.error('Error loading image:', error)}
-  style={{ height: 50, width: 110 }} 
-/>            
+                        <Image
+                          source={{
+                            uri: `https://bwipjs-api.metafloor.com/?bcid=code128&text=${item}&scale=1`,
+                          }}
+                          onLoad={() => <Text>Loading...</Text>}
+                          onError={(error) =>
+                            console.error("Error loading image:", error)
+                          }
+                          style={{ height: 50, width: 110 }}
+                        />
                         {/* <Barcode
                           value={JSON.stringify(item)}
                           options={{
@@ -157,7 +163,7 @@ const GeneratedDataScreen = ({ data, setIsGenerated, setdata }) => {
                             iconColor={"#d32f2f"}
                             size={24}
                             onPress={() => {
-                              openModal(item)
+                              openModal(item);
                             }}
                           />
                         </View>
@@ -270,10 +276,10 @@ const GeneratedDataScreen = ({ data, setIsGenerated, setdata }) => {
         setdata={setdata}
         data={data}
       />
-      <DeleteConfirmationModal 
-      isVisible={isModalVisible}
-      onConfirm={handleDelete}
-      onCancel={closeModal}
+      <DeleteConfirmationModal
+        isVisible={isModalVisible}
+        onConfirm={handleDelete}
+        onCancel={closeModal}
       />
     </PaperProvider>
   );
@@ -311,13 +317,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 15,
     justifyContent: "center",
-    color: "black"
+    color: "black",
   },
   cellContent: {
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
-    color: "black"
+    color: "black",
   },
   btn: {
     paddingVertical: 10,
@@ -395,7 +401,7 @@ const styles = StyleSheet.create({
   old: {
     marginHorizontal: -10,
   },
-  cb : {
-    color: "black"
-  }
+  cb: {
+    color: "black",
+  },
 });
